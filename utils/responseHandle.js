@@ -9,9 +9,9 @@ const responseData = function (response, statusCode, values, status) {
   response.end;
 };
 
-const responseMessage = function (response, statusCode, message, status) {
+const responseMessage = function (response, statusCode, message,isError) {
   var data = {
-    status: status,
+    error: isError,
     message: message,
   };
   response.status(statusCode).json(data);
