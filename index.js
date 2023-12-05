@@ -1,7 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-const userRoute = require("./router/userRoute");
+const userRoute = require("./router/userRoute"); 
+const authRoute = require("./router/authRoute"); 
 const dotenv = require("dotenv");
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -12,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //user
 app.use("/api/user", userRoute);
+app.use("/api/auth", authRoute);
 
 // buat server nya
 app.listen(PORT, () => console.log(`Server running at port: ${PORT}`));
