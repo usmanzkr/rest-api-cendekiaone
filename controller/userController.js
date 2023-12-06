@@ -43,7 +43,7 @@ async function updateUser(req, res) {
 
     // Check if a file was uploaded
     if (!req.file) {
-        await user.update({ name, username, bio }, { where: { id_user } });
+        await user.update({ name, username, bio }, { where: { id:id_user } });
         responseMessage(res, 200, 'User updated successfully', false);
     } else {
       // File uploaded
@@ -66,7 +66,7 @@ async function updateUser(req, res) {
         const profil_url = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
 
         // Update user with the new profile URL
-        await user.update({ name, username, bio, profil_url }, { where: { id_user } });
+        await user.update({ name, username, bio, profil_url }, { where: { id:id_user } });
 
         responseMessage(res, 200, 'User updated successfully', false);
       });

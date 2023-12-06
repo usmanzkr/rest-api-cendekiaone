@@ -7,6 +7,6 @@ const multerUpload = multer({ storage: multerStorage });
 
 router.get("/", userController.getUser);
 router.get("/detail", userController.getUserById);
-router.put("/update-profile", multerUpload.single('profileImage'), userController.updateUser);
+router.post("/update-profile", multerUpload.single('profileImage'), userController.updateUser);
 
 module.exports = router;
