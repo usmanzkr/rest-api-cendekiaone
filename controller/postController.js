@@ -1,12 +1,11 @@
-const { postingan, sequelize } = require('../models');
+const { post, sequelize } = require('../models');
 const { responseMessage, responseData } = require('../utils/responseHandle');
 
-async function post(res,req) {
+async function posted(req,res) {
   try {
     const { post_title, post_description, id_user, image_url, categories } = req.body;
 
-    // Create a new postingan
-    await postingan.create({
+    await post.create({
       post_title,
       post_description,
       id_user,
@@ -21,6 +20,16 @@ async function post(res,req) {
   }
 }
 
+async function getAllPost(req,res){
+    try {
+      const postingans = await post.findAll();
+      responseData(res, 200, postingans, 'Success');
+    } catch (error) {
+      responseMessage(res, 500, 'Internal server error');
+    }
+}
+
 module.exports = {
-    post
+    posted,
+    getAllPost
 };

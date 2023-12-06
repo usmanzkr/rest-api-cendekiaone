@@ -4,6 +4,7 @@ const app = express();
 const cors = require('cors');
 const userRoute = require("./router/userRoute"); 
 const authRoute = require("./router/authRoute"); 
+const postRoute = require("./router/postRoute"); 
 const dotenv = require("dotenv");
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -18,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //set route
 //user
 app.use("/api/user", userRoute);
-app.use("/api/post", userRoute);
+app.use("/api/post", postRoute);
 app.use("/api/", authRoute);
 
 // buat server nya
