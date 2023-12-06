@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //set route
 //user
 app.use("/api/user", userRoute);
-app.use("/api/auth", authRoute);
+app.use("/api/", authRoute);
 
 // buat server nya
 app.listen(PORT, () => console.log(`Server running at port: ${PORT}`));
