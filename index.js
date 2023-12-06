@@ -18,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //set route
 //user
 app.use("/api/user", userRoute);
+app.use("/api/post", userRoute);
 app.use("/api/", authRoute);
 
 // buat server nya
