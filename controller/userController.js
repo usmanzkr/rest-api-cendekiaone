@@ -114,6 +114,39 @@ async function follow(req, res) {
   } catch (error) {}
 }
 
+async function getFollowing(req, res) {
+  try {
+    const userId = req.body.userId; 
+    if (!userId) {
+      return responseMessage(res,400,"user cannot empty",true)
+    }
+
+    const followingList = await following.findAll({
+      attributes: ["following", "id_user"],
+      include: [
+        {
+          model: user,
+          as: "followingsDetails",
+          attributes: ["id", "name", "username"],
+        },
+        {
+          model: user,
+          as: "accountOwner",
+          attributes: ["name", "username"],
+        },
+      ],
+      where: {
+        id_user: userId,
+      },
+    });
+
+    return responseData(res, 200, followingList, "Success");
+  } catch (error) {
+    console.error(error);
+    return responseMessage(res, 500, "Internal server error");
+  }
+}
+
 async function getFollowers(req, res) {
   try {
     const userId = req.body.userId; 
@@ -121,7 +154,7 @@ async function getFollowers(req, res) {
       return responseMessage(res,400,"user cannot empty",true)
     }
 
-    const followerList = await follower.findAll({
+    const followersList = await follower.findAll({
       attributes: ["followers", "id_user"],
       include: [
         {
@@ -140,12 +173,13 @@ async function getFollowers(req, res) {
       },
     });
 
-    return responseData(res, 200, followerList, "Success");
+    return responseData(res, 200, followersList, "Success");
   } catch (error) {
     console.error(error);
     return responseMessage(res, 500, "Internal server error");
   }
 }
+
 
 module.exports = {
   getUser,
@@ -153,4 +187,5 @@ module.exports = {
   getUserById,
   follow,
   getFollowers,
+  getFollowing,
 };
