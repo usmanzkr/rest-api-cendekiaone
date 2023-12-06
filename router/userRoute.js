@@ -10,5 +10,6 @@ router.get("/detail", userController.getUserById);
 router.post("/update-profile", multerUpload.single('profileImage'), userController.updateUser);
 router.post("/follow", userController.follow);
 router.get("/followers-list", userController.getFollowers);
+router.get("/followings-list", userController.getFollowing);
 
 module.exports = router;

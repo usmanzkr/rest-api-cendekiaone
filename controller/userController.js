@@ -139,8 +139,16 @@ async function getFollowing(req, res) {
         id_user: userId,
       },
     });
-
-    return responseData(res, 200, followingList, "Success");
+    const data = followingList.map((item) => ({
+      id_user: item.id_user,
+      following_id: item.following,
+      following_name: item.followingsDetails.name,
+      following_username: item.followingsDetails.username,
+      account_owner_name: item.accountOwner.name,
+      account_owner_username: item.accountOwner.username,
+    }));
+   
+    return responseData(res, 200, data, "Success");
   } catch (error) {
     console.error(error);
     return responseMessage(res, 500, "Internal server error");
@@ -172,8 +180,15 @@ async function getFollowers(req, res) {
         id_user: userId,
       },
     });
-
-    return responseData(res, 200, followersList, "Success");
+    const data = followersList.map((item) => ({
+      id_user: item.id_user,
+      following_id: item.follower,
+      follower_name: item.followerDetails.name,
+      follower_username: item.followerDetails.username,
+      account_owner_name: item.accountOwner.name,
+      account_owner_username: item.accountOwner.username,
+    }));
+    return responseData(res, 200, data, "Success");
   } catch (error) {
     console.error(error);
     return responseMessage(res, 500, "Internal server error");
