@@ -182,7 +182,7 @@ async function getFollowers(req, res) {
     });
     const data = followersList.map((item) => ({
       id_user: item.id_user,
-      following_id: item.follower,
+      following_id: item.followers,
       follower_name: item.followerDetails.name,
       follower_username: item.followerDetails.username,
       account_owner_name: item.accountOwner.name,

@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "Authentication API",
+    "title": "User API",
     "description": "API for user registration, login, password change, and account deletion"
   },
   "basePath": "/api",
@@ -10,6 +10,10 @@
     {
       "name": "auth",
       "description": "Authentication operations"
+    },
+    {
+      "name": "user",
+      "description": "User operations"
     }
   ],
   "paths": {
@@ -124,6 +128,139 @@
           }
         }
       }
+    },
+    "/user": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Get all users",
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          }
+        }
+      }
+    },
+    "/user/detail": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Get user by ID",
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/user/update-profile": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Update user profile",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User profile update details",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateProfileRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User updated successfully"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/user/follow": {
+      "post": {
+        "tags": ["user"],
+        "summary": "Follow another user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Follow user details",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FollowRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully followed this user"
+          },
+          "400": {
+            "description": "Already follow this user"
+          }
+        }
+      }
+    },
+    "/user/followers-list": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Get followers list",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "User cannot be empty"
+          }
+        }
+      }
+    },
+    "/user/followings-list": {
+      "get": {
+        "tags": ["user"],
+        "summary": "Get followings list",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "User cannot be empty"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -187,6 +324,38 @@
       "type": "object",
       "properties": {
         "id_user": {
+          "type": "integer"
+        }
+      }
+    },
+    "UpdateProfileRequest": {
+      "type": "object",
+      "properties": {
+        "id_user": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "username": {
+          "type": "string"
+        },
+        "bio": {
+          "type": "string"
+        },
+        "profileImage": {
+          "type": "string",
+          "format": "binary"
+        }
+      }
+    },
+    "FollowRequest": {
+      "type": "object",
+      "properties": {
+        "current_user_id": {
+          "type": "integer"
+        },
+        "another_user_id": {
           "type": "integer"
         }
       }
