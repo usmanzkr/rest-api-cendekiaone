@@ -1,6 +1,8 @@
 const { user } = require("../models");
+const { following } = require("../models");
+const { follower } = require("../models");
+const { sequelize } = require('../models'); 
 const { responseMessage, responseData } = require("../utils/responseHandle");
-const multer = require('multer');
 const { Storage } = require('@google-cloud/storage');
 
 // Initialize Google Cloud Storage
@@ -80,10 +82,43 @@ async function updateUser(req, res) {
   }
 }
 
+async function follow(req,res){
+  try {
+      const t = await sequelize.transaction();
+      const {current_user_id,another_user_id} = req.body
+      const isAlreadyFollow = await following.findOne({following:another_user_id})
+      console.log(isAlreadyFollow);
+      if (isAlreadyFollow) {
+       return responseMessage(res,400,'already follow this user')
+      }
+
+      await following.create({
+        following:another_user_id,
+        id_user:current_user_id,
+      },
+      { transaction: t }
+      )
+      await follower.create({
+        followers:current_user_id,
+        id_user:another_user_id,
+      },
+      { transaction: t }
+      )
+      await t.commit();
+      return responseMessage(res,200,'successfully followed this user')
+  } catch (error) {
+    
+  }
+}
+
+async function addFolowing(req,res){
+  
+}
 
 
 module.exports = {
   getUser,
   updateUser,
   getUserById,
+  follow,
 };
