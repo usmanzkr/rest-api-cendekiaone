@@ -13,15 +13,25 @@ const storage = new Storage({
 const bucket = storage.bucket('your-bucket-name');
 
 
-// Multer configuration for handling file uploads
-const multerStorage = multer.memoryStorage();
-
-
 async function getUser(req, res) {
   try {
     const data = await user.findAll();
     responseData(res, 200, data, "success");
-    
+  } catch (error) {
+    responseMessage(res, 404, `failed get user ${error}`);
+  }
+}
+
+
+async function getUserById(req, res) {
+  try {
+    const {id_user} = req.body
+    console.log(id_user);
+    const data = await user.findOne({ where: { id:id_user } })
+    if (!data) {
+      return responseMessage(res,404,`user not found`)
+    }
+    responseData(res, 200, data, "success");
   } catch (error) {
     responseMessage(res, 404, `failed get user ${error}`);
   }
@@ -70,10 +80,10 @@ async function updateUser(req, res) {
   }
 }
 
-function deleteUser(req, res) {}
+
 
 module.exports = {
   getUser,
   updateUser,
-  deleteUser,
+  getUserById,
 };
