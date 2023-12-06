@@ -67,7 +67,7 @@ async function login(req, res) {
   }
 }
 
-async function updateAkun(req, res) {
+async function changePassword(req, res) {
   try {
     const { id_user, currentPassword, newPassword } = req.body;
 
@@ -88,11 +88,23 @@ async function updateAkun(req, res) {
   }
 }
 
-function deleteAkun(req, res) {
-  
-}
+async function deleteAkun(req, res) {
+  try {
+    const { id_user } = req.body;
 
+    await auth.destroy({ where: { id_user } });
+
+    await user.destroy({ where: { id: id_user } });
+
+    responseMessage(res, 200, "Account deleted successfully", false);
+  } catch (error) {
+    console.error(error);
+    responseMessage(res, 500, "Internal server error");
+  }
+}
 module.exports = {
   login,
   register,
+  deleteAkun,
+  changePassword,
 };
