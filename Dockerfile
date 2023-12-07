@@ -23,7 +23,7 @@ ENV MYSQL_PASSWORD=cendekiaone
 ENV MYSQL_DATABASE=db_cendekiaone
 
 # Run Sequelize migrations before starting the application
-RUN npm run sequelize:migrate
+RUN npx sequelize-cli db:migrate
 
 # Command to run the application
 CMD ["npm", "run", "dev"]
