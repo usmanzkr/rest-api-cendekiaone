@@ -3,7 +3,7 @@
     "username": "cendekiaone",
     "password": "cendekiaone",
     "database": "db_cendekiaone",
-    "host": "mysql",
+    "host": "db",
     "port": 3301,  
     "dialect": "mysql"
   },
@@ -11,7 +11,7 @@
     "username": "cendekiaone",
     "password": "cendekiaone",
     "database": "db_cendekiaone",
-    "host": "mysql",
+    "host": "db",
     "port": 3301,  
     "dialect": "mysql"
   },
@@ -19,7 +19,7 @@
     "username": "cendekiaone",
     "password": "cendekiaone",
     "database": "db_cendekiaone",
-    "host": "mysql",
+    "host": "db",
     "port": 3301,  
     "dialect": "mysql"
   }

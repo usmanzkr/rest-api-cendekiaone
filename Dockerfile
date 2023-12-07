@@ -17,7 +17,7 @@ COPY . .
 EXPOSE 3000
 
 # Define environment variable for MySQL connection
-ENV MYSQL_HOST=mysql
+ENV MYSQL_HOST=db
 ENV MYSQL_USER=cendekiaone
 ENV MYSQL_PASSWORD=cendekiaone
 ENV MYSQL_DATABASE=db_cendekiaone

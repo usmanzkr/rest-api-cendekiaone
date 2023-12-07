@@ -8,9 +8,9 @@ services:
     environment:
       NODE_ENV: production
     depends_on:
-      - mysql
+      - db
 
-  mysql:
+  db:
     image: mysql:latest
     environment:
       MYSQL_ROOT_PASSWORD: cendekiaone
