@@ -18,4 +18,4 @@ services:
       MYSQL_USER: cendekiaone
       MYSQL_PASSWORD: cendekiaone
     ports:
-      - "3306:3306"  # Ubah ini menjadi "3306:3306"
+      - "3307:3306"  # Ubah ini menjadi "3306:3306"
