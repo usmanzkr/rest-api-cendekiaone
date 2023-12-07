@@ -21,6 +21,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api/user", userRoute);
 app.use("/api/post", postRoute);
 app.use("/api/", authRoute);
-
+// default route
+app.get("/", (req, res) => {
+  res.send("API cendekiaone");
+});
 // buat server nya
 app.listen(PORT, () => console.log(`Server running at port: ${PORT}`));

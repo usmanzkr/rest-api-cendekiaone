@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: cendekiaone
+      MYSQL_DATABASE: db_cendekiaone
+      MYSQL_USER: cendekiaone
+      MYSQL_PASSWORD: cendekiaone
+    ports:
+      - "3306:3306"  # Ubah ini menjadi "3306:3306"
