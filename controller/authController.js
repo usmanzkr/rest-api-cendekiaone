@@ -1,4 +1,4 @@
-const { user,auth } = require("../models");
+const { user, auth } = require("../models");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { responseMessage, responseData } = require("../utils/responseHandle");
@@ -8,14 +8,16 @@ async function register(req, res) {
     const { name, username, email, password } = req.body;
     const existingEmail = await auth.findOne({ where: { email: email } });
     if (existingEmail) {
-      return responseMessage(res, 400, 'Email already exists', 'false');
+      return responseMessage(res, 400, "Email already exists", "false");
     }
-    
-    const existingUsername = await user.findOne({ where: { username: username } });
+
+    const existingUsername = await user.findOne({
+      where: { username: username },
+    });
     if (existingUsername) {
-      return responseMessage(res, 400, 'Username already exists', 'false');
+      return responseMessage(res, 400, "Username already exists", "false");
     }
-    
+
     const passwordHash = await bcrypt.hash(password, 10);
     const newUser = await user.create({ name: name, username: username });
     await auth.create({
@@ -35,12 +37,12 @@ async function login(req, res) {
     const { email, password } = req.body;
 
     const account = await auth.findOne({ where: { email } });
-    const profile = await user.findOne({ where: { id:account.id_user } });
+    const profile = await user.findOne({ where: { id: account.id_user } });
 
     if (!account) {
       return responseMessage(res, 401, "email not registered");
     }
-    
+
     const isPasswordValid = await bcrypt.compare(password, account.password);
 
     if (!isPasswordValid) {
@@ -54,12 +56,17 @@ async function login(req, res) {
       { expiresIn: "360d" }
     );
     await auth.update({ token }, { where: { id: account.id } });
-      
-    responseData(res, 200, { 
-      token:token,
-      id_user:account.id_user,
-      username:profile.username,
-    }, "Login successful");
+
+    responseData(
+      res,
+      200,
+      {
+        token: token,
+        id_user: account.id_user,
+        username: profile.username,
+      },
+      "Login successful"
+    );
   } catch (error) {
     console.error(error);
     responseMessage(res, 500, "Internal server error");
@@ -72,7 +79,10 @@ async function changePassword(req, res) {
 
     const account = await auth.findOne({ where: { id_user } });
 
-    const isPasswordValid = await bcrypt.compare(currentPassword, account.password);
+    const isPasswordValid = await bcrypt.compare(
+      currentPassword,
+      account.password
+    );
     if (!isPasswordValid) {
       return responseMessage(res, 401, "Current password is incorrect");
     }

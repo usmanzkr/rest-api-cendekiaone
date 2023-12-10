@@ -22,9 +22,9 @@ async function getUser(req, res) {
 
 async function getUserById(req, res) {
   try {
-    const { id_user } = req.body;
-    console.log(id_user);
-    const data = await user.findOne({ where: { id: id_user } });
+    const { id } = req.params;
+    console.log(id);
+    const data = await user.findOne({ where: { id: id } });
     if (!data) {
       return responseMessage(res, 404, `user not found`);
     }
@@ -116,9 +116,9 @@ async function follow(req, res) {
 
 async function getFollowing(req, res) {
   try {
-    const userId = req.body.userId; 
+    const userId = req.body.userId;
     if (!userId) {
-      return responseMessage(res,400,"user cannot empty",true)
+      return responseMessage(res, 400, "user cannot empty", true);
     }
 
     const followingList = await following.findAll({
@@ -147,7 +147,7 @@ async function getFollowing(req, res) {
       account_owner_name: item.accountOwner.name,
       account_owner_username: item.accountOwner.username,
     }));
-   
+
     return responseData(res, 200, data, "Success");
   } catch (error) {
     console.error(error);
@@ -157,9 +157,9 @@ async function getFollowing(req, res) {
 
 async function getFollowers(req, res) {
   try {
-    const userId = req.body.userId; 
+    const userId = req.body.userId;
     if (!userId) {
-      return responseMessage(res,400,"user cannot empty",true)
+      return responseMessage(res, 400, "user cannot empty", true);
     }
 
     const followersList = await follower.findAll({
@@ -194,7 +194,6 @@ async function getFollowers(req, res) {
     return responseMessage(res, 500, "Internal server error");
   }
 }
-
 
 module.exports = {
   getUser,
