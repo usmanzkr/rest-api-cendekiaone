@@ -53,7 +53,7 @@ async function updateUser(req, res) {
           contentType: file.mimetype,
         },
       });
-
+      
       fileStream.on("error", (err) => {
         console.error(err);
         responseMessage(res, 500, "Failed to upload profile image", true);
