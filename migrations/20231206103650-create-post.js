@@ -24,6 +24,24 @@ module.exports = {
       categories: {
         type: Sequelize.STRING,
       },
+      sub_categories: {
+        type: Sequelize.STRING,
+      },
+      likes: {
+        type: Sequelize.INTEGER,
+      },
+      saved: {
+        type: Sequelize.STRING,
+      },
+      summary: {
+        type: Sequelize.STRING,
+      },
+      following: {
+        type: Sequelize.STRING,
+      },
+      status: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
