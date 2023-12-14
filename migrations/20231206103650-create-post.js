@@ -12,7 +12,7 @@ module.exports = {
       post_title: {
         type: Sequelize.STRING,
       },
-      post_description: {
+      post_body: {
         type: Sequelize.TEXT,
       },
       id_user: {
