@@ -15,10 +15,16 @@ module.exports = (sequelize, DataTypes) => {
   }
   post.init({
     post_title: DataTypes.STRING,
-    post_description: DataTypes.TEXT,
+    body: DataTypes.TEXT,
     id_user: DataTypes.INTEGER,
     image_url: DataTypes.TEXT,
     categories: DataTypes.STRING,
+    sub_categories: DataTypes.STRING,
+    likes: DataTypes.INTEGER,
+    saved: DataTypes.STRING,
+    summary: DataTypes.STRING,
+    following: DataTypes.STRING,
+    status: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'post',
