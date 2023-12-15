@@ -53,7 +53,7 @@ async function updateUser(req, res) {
           contentType: file.mimetype,
         },
       });
-      
+
       fileStream.on("error", (err) => {
         console.error(err);
         responseMessage(res, 500, "Failed to upload profile image", true);
@@ -83,46 +83,51 @@ async function updateUser(req, res) {
 async function follow(req, res) {
   try {
     const t = await sequelize.transaction();
-    const { current_user_id, another_user_id } = req.body;
-    if (!current_user_id || !another_user_id) {
+    const { account_owner, followed_user } = req.body;
+    if (!account_owner || !followed_user) {
       return responseMessage(res, 404, "user cannot empty");
     }
     const isAlreadyFollow = await following.findOne({
-      where: [{ following: another_user_id }, { id_user: current_user_id }],
+      where: [
+        { following_user: followed_user },
+        { account_owner: account_owner },
+      ],
     });
-    console.log(isAlreadyFollow);
+
     if (isAlreadyFollow) {
       return responseMessage(res, 400, "already follow this user");
     }
 
     await following.create(
       {
-        following: another_user_id,
-        id_user: current_user_id,
+        following_user: followed_user,
+        account_owner: account_owner,
       },
       { transaction: t }
     );
     await follower.create(
       {
-        followers: current_user_id,
-        id_user: another_user_id,
+        followers: account_owner,
+        account_owner: followed_user,
       },
       { transaction: t }
     );
     await t.commit();
     return responseMessage(res, 200, "successfully followed this user");
-  } catch (error) {}
+  } catch (error) {
+    return responseMessage(res, 500, error);
+  }
 }
 
 async function getFollowing(req, res) {
   try {
-    const userId = req.body.userId;
-    if (!userId) {
+    const { id } = req.params;
+    if (!id) {
       return responseMessage(res, 400, "user cannot empty", true);
     }
 
     const followingList = await following.findAll({
-      attributes: ["following", "id_user"],
+      attributes: ["following_user", "account_owner"],
       include: [
         {
           model: user,
@@ -136,12 +141,12 @@ async function getFollowing(req, res) {
         },
       ],
       where: {
-        id_user: userId,
+        account_owner: id,
       },
     });
     const data = followingList.map((item) => ({
-      id_user: item.id_user,
-      following_id: item.following,
+      id_user: item.account_owner,
+      following_id: item.following_user,
       following_name: item.followingsDetails.name,
       following_username: item.followingsDetails.username,
       account_owner_name: item.accountOwner.name,
@@ -157,13 +162,13 @@ async function getFollowing(req, res) {
 
 async function getFollowers(req, res) {
   try {
-    const userId = req.body.userId;
-    if (!userId) {
+    const { id } = req.params;
+    console.log(id);
+    if (!id) {
       return responseMessage(res, 400, "user cannot empty", true);
     }
-
     const followersList = await follower.findAll({
-      attributes: ["followers", "id_user"],
+      attributes: ["followers", "account_owner"],
       include: [
         {
           model: user,
@@ -177,11 +182,11 @@ async function getFollowers(req, res) {
         },
       ],
       where: {
-        id_user: userId,
+        account_owner: id,
       },
     });
     const data = followersList.map((item) => ({
-      id_user: item.id_user,
+      id_user: item.account_owner,
       following_id: item.followers,
       follower_name: item.followerDetails.name,
       follower_username: item.followerDetails.username,

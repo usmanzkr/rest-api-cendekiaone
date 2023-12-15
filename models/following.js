@@ -11,13 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      following.belongsTo(models.user, { foreignKey: 'following', as: 'followingsDetails' });
-      following.belongsTo(models.user, { foreignKey: 'id_user', as: 'accountOwner' });
+      following.belongsTo(models.user, { foreignKey: 'following_user', as: 'followingsDetails' });
+      following.belongsTo(models.user, { foreignKey: 'account_owner', as: 'accountOwner' });
     }
   }
   following.init({
-    following: DataTypes.INTEGER,
-    id_user: DataTypes.INTEGER
+    following_user: DataTypes.INTEGER,
+    account_owner: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'following',

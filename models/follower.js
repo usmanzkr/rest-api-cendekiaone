@@ -11,12 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       follower.belongsTo(models.user, { foreignKey: 'followers', as: 'followerDetails' });
-      follower.belongsTo(models.user, { foreignKey: 'id_user', as: 'accountOwner' });
+      follower.belongsTo(models.user, { foreignKey: 'account_owner', as: 'accountOwner' });
     }
   }
   follower.init({
     followers: DataTypes.INTEGER,
-    id_user: DataTypes.INTEGER
+    account_owner: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'follower',

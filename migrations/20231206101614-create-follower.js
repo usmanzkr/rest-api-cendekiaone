@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      follower_user_id: {
+      followers: {
         type: Sequelize.INTEGER
       },
       account_owner: {
