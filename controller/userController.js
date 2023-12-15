@@ -23,7 +23,6 @@ async function getUser(req, res) {
 async function getUserById(req, res) {
   try {
     const { id } = req.params;
-    console.log(id);
     const data = await user.findOne({ where: { id: id } });
     if (!data) {
       return responseMessage(res, 404, `user not found`);
@@ -200,6 +199,32 @@ async function getFollowers(req, res) {
   }
 }
 
+const { Op } = require("sequelize");
+
+async function searchUser(req, res) {
+  try {
+    const { username } = req.query;
+    
+    const usersResult = await user.findAll({
+      where: {
+        username: {
+          [Op.like]: `%${username}%`,
+        },
+      },
+    });
+
+    if (usersResult.length > 0) {
+      return responseData(res, 200, usersResult, "Success");
+    } else {
+      return responseMessage(res, 404, "User not found");
+    }
+  } catch (error) {
+    console.error(error);
+    return responseMessage(res, 500, "Internal server error");
+  }
+}
+
+
 module.exports = {
   getUser,
   updateUser,
@@ -207,4 +232,5 @@ module.exports = {
   follow,
   getFollowers,
   getFollowing,
+  searchUser,
 };
