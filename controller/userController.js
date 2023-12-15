@@ -162,7 +162,6 @@ async function getFollowing(req, res) {
 async function getFollowers(req, res) {
   try {
     const { id } = req.params;
-    console.log(id);
     if (!id) {
       return responseMessage(res, 400, "user cannot empty", true);
     }
@@ -204,7 +203,7 @@ const { Op } = require("sequelize");
 async function searchUser(req, res) {
   try {
     const { username } = req.query;
-    
+
     const usersResult = await user.findAll({
       where: {
         username: {
@@ -223,7 +222,6 @@ async function searchUser(req, res) {
     return responseMessage(res, 500, "Internal server error");
   }
 }
-
 
 module.exports = {
   getUser,

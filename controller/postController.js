@@ -1,4 +1,4 @@
-const { post, user } = require("../models");
+const { post, user, likes } = require("../models");
 const { responseMessage, responseData } = require("../utils/responseHandle");
 
 async function posted(req, res) {
@@ -151,8 +151,27 @@ async function getPostById(req, res) {
   }
 }
 
+async function likePost(req, res) {
+  const { post_id, liked_by } = req.body;
+
+  const isAlreadyLike = await likes.findOne({
+    where: [{ id_post: post_id }, { liked_by_user: liked_by }],
+  });
+
+  if (isAlreadyLike) {
+    return responseMessage(res, 400, "already like this post");
+  }
+
+  await likes.create({
+    id_post: post_id,
+    liked_by_user: liked_by,
+  });
+  return responseMessage(res, 200, "successfully liked this post");
+}
+
 module.exports = {
   posted,
   getAllPost,
   getPostById,
+  likePost,
 };

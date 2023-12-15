@@ -48,7 +48,6 @@ async function login(req, res) {
     if (!isPasswordValid) {
       return responseMessage(res, 401, "Invalid password");
     }
-    console.log(account);
 
     const token = jwt.sign(
       { userId: account.id },

@@ -18,9 +18,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 //set route
 //user
-app.use("/api/user", userRoute);
-app.use("/api/post", postRoute);
-app.use("/api/", authRoute);
+// app.use("/api/user", userRoute);
+// app.use("/api/post", postRoute);
+app.use("/api/", authRoute,userRoute,postRoute);
 // default route
 app.get("/", (req, res) => {
   res.send("API cendekiaone");
