@@ -1,4 +1,4 @@
-const { user, following, follower, sequelize } = require("../models");
+const { user, following, follower, sequelize, post } = require("../models");
 const { responseMessage, responseData } = require("../utils/responseHandle");
 const { Storage } = require("@google-cloud/storage");
 
@@ -23,11 +23,43 @@ async function getUser(req, res) {
 async function getUserById(req, res) {
   try {
     const { id } = req.params;
-    const data = await user.findOne({ where: { id: id } });
-    if (!data) {
+
+    const userResult = await user.findOne({ where: { id: id } });
+
+    if (!userResult) {
       return responseMessage(res, 404, `user not found`);
     }
-    responseData(res, 200, data, "success");
+
+    const jumlahPost = await post.count({
+      where: {
+        id_user: id,
+      },
+    });
+
+    const jumlahFollower = await follower.count({
+      where: {
+        account_owner: id,
+      },
+    });
+
+    const jumlahFollowing = await following.count({
+      where: {
+        account_owner: id,
+      },
+    });
+
+    const formattedData = {
+      id: userResult.id,
+      name:userResult.name,
+      username:userResult.username,
+      bio:userResult.bio,
+      follower:jumlahFollower,
+      following:jumlahFollowing,
+      post:jumlahPost,
+      profile_picture:userResult.profile_picture,
+    }
+
+    responseData(res, 200, formattedData, "success");
   } catch (error) {
     responseMessage(res, 404, `failed get user ${error}`);
   }
@@ -143,6 +175,7 @@ async function getFollowing(req, res) {
         account_owner: id,
       },
     });
+
     const data = followingList.map((item) => ({
       id_user: item.account_owner,
       following_id: item.following_user,
