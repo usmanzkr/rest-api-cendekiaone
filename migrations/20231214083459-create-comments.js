@@ -15,6 +15,9 @@ module.exports = {
       comment_by_user: {
         type: Sequelize.INTEGER
       },
+      comment_body: {
+        type: Sequelize.TEXT
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

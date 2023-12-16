@@ -1,4 +1,4 @@
-const { post, user, likes } = require("../models");
+const { post, user, likes, comments } = require("../models");
 const { responseMessage, responseData } = require("../utils/responseHandle");
 
 async function posted(req, res) {
@@ -29,7 +29,7 @@ async function posted(req, res) {
       include: [
         {
           model: user,
-          attributes: ["name"],
+          attributes: ["username"],
           as: "createdByUser",
         },
       ],
@@ -40,7 +40,7 @@ async function posted(req, res) {
       status: "Post Created",
       data: {
         idPost: createdPost.id,
-        createBy: createdPost.createdByUser.name,
+        createBy: createdPost.createdByUser.username,
         postPicture: createdPost.image_url,
         description: createdPost.post_body,
         category: createdPost.categories,
@@ -154,19 +154,46 @@ async function getPostById(req, res) {
 async function likePost(req, res) {
   const { post_id, liked_by } = req.body;
 
-  const isAlreadyLike = await likes.findOne({
-    where: [{ id_post: post_id }, { liked_by_user: liked_by }],
-  });
+  try {
+    const isAlreadyLike = await likes.findOne({
+      where: [{ id_post: post_id }, { liked_by_user: liked_by }],
+    });
+  
+    if (isAlreadyLike) {
+      return responseMessage(res, 400, "already like this post");
+    }
+  
+    await likes.create({
+      id_post: post_id,
+      liked_by_user: liked_by,
+    });
+    return responseMessage(res, 200, "successfully liked this post");
+  } catch (error) {
 
-  if (isAlreadyLike) {
-    return responseMessage(res, 400, "already like this post");
+    return responseMessage(res, 500, `${error}`);
   }
+}
 
-  await likes.create({
+async function commentPost(req, res) {
+  const { post_id, comment_by, comment_body } = req.body;
+  const commentReturn = await comments.create({
     id_post: post_id,
-    liked_by_user: liked_by,
+    comment_by_user:comment_by,
+    comment_body:comment_body,
   });
-  return responseMessage(res, 200, "successfully liked this post");
+  const createdComment = await comments.findByPk(commentReturn.id, {
+    include: [
+      {
+        model: user,
+        attributes: ["username"],
+        as: "commentByUser",
+      },
+    ],
+  });
+  return responseData(res, 200, {
+    username:createdComment.commentByUser.username,
+    comments:createdComment.comment_body
+  });
 }
 
 module.exports = {
@@ -174,4 +201,5 @@ module.exports = {
   getAllPost,
   getPostById,
   likePost,
+  commentPost,
 };
