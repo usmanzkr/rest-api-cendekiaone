@@ -176,24 +176,28 @@ async function likePost(req, res) {
 
 async function commentPost(req, res) {
   const { post_id, comment_by, comment_body } = req.body;
-  const commentReturn = await comments.create({
-    id_post: post_id,
-    comment_by_user:comment_by,
-    comment_body:comment_body,
-  });
-  const createdComment = await comments.findByPk(commentReturn.id, {
-    include: [
-      {
-        model: user,
-        attributes: ["username"],
-        as: "commentByUser",
-      },
-    ],
-  });
-  return responseData(res, 200, {
-    username:createdComment.commentByUser.username,
-    comments:createdComment.comment_body
-  });
+  try {
+    const commentReturn = await comments.create({
+      id_post: post_id,
+      comment_by_user:comment_by,
+      comment_body:comment_body,
+    });
+    const createdComment = await comments.findByPk(commentReturn.id, {
+      include: [
+        {
+          model: user,
+          attributes: ["username"],
+          as: "commentByUser",
+        },
+      ],
+    });
+    return responseData(res, 200, {
+      username:createdComment.commentByUser.username,
+      comments:createdComment.comment_body
+    },"success");
+  } catch (error) {
+    return responseMessage(res, 500, `${error}`);
+  }
 }
 
 module.exports = {
