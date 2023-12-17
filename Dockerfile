@@ -2,29 +2,15 @@
 FROM node:14
 
 # Set the working directory in the container
-WORKDIR /
+WORKDIR /app
 
 # Copy package.json and package-lock.json to the container
-COPY package*.json ./
+ADD package*.json ./
 
 # Install app dependencies
 RUN npm install
 
 # Copy the rest of the application code to the container
-COPY . .
+ADD . .
 
-# Expose the port the app runs on
-EXPOSE 3000
-
-# Define environment variable for MySQL connection
-ENV MYSQL_HOST=db
-ENV MYSQL_USER=cendekiaone
-ENV MYSQL_PASSWORD=cendekiaone
-ENV MYSQL_DATABASE=db_cendekiaone
-
-# Run Sequelize migrations before starting the application
-RUN npx sequelize-cli db:migrate
-
-# Command to run the application
-CMD ["npm", "run", "dev"]
-
+CMD node index.js
